@@ -1,12 +1,14 @@
 let canvas : HTMLCanvasElement;
 let context : CanvasRenderingContext2D;
 let hero = <HTMLImageElement>document.getElementById("hero");
+let zombie = <HTMLImageElement>document.getElementById("zombie");
 let background = <HTMLImageElement>document.getElementById("background");
 
-function gameLoop(): void {
+function gameLoop() {
   requestAnimationFrame(gameLoop);
   context.drawImage(background, 0, 0, 750, 550);
   player.draw();
+  zombie1.draw();
 }
 
 window.onload = () =>
@@ -19,14 +21,7 @@ window.onload = () =>
   gameLoop();
 }
 
-interface iGameChar {
-  draw(): void;
-  x: number;
-  y: number;
-  speed: number;
-}
-
-class cPlayer implements iGameChar {
+class cPlayer {
   constructor(public x: number, public y: number, public speed: number, public width: number, public height: number) {
     x = 0;
     y = 0;
@@ -42,7 +37,23 @@ class cPlayer implements iGameChar {
   }
 }
 
-let player = new cPlayer(350, 300, 0, 50, 60);
+class cZombie {
+  constructor(public x: number, public y: number, public speed: number, public width: number, public height: number) {
+    x = 0;
+    y = 0;
+    speed = 0;
+  }
+  public draw = (): void => {
+    context.save();
+    context.translate(this.width, this.height);
+    context.translate(this.x, this.y);
+    context.drawImage(zombie, 0, 0, 50, 60);
+    context.restore();
+  }
+}
+
+let player = new cPlayer(100, 100, 0, 50, 60);
+let zombie1 = new cZombie(200, 200, 0, 60, 60);
 
 function keyboardInput(event: KeyboardEvent) {
   if(event.keyCode == 37 || event.keyCode == 65) {
